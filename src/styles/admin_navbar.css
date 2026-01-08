@@ -1,0 +1,7 @@
+.admin-navbar .choice .active{
+     background-color: #C869FF;
+}
+
+.admin-navbar .choice .active .icon, .admin-navbar .choice .active span{
+     color: white;
+}
