@@ -52,8 +52,8 @@ function Login() {
 
      return (
           <div className="h-screen overflow-hidden">
-               <img src={LoginImage} className='w-1/3 h-4/5 absolute right-0 top-0' />
-               <section className="w-1/3 ml-40 mt-20 shadow-lg rounded-md">
+               <img src={LoginImage} className='w-1/3 h-4/5 absolute right-0 top-0 max-sm:hidden' />
+               <section className="w-1/3 ml-40 mt-20 shadow-lg rounded-md max-sm:w-2/3 max-sm:mx-auto">
                     <h1 className="w-fit purple-light-color font-bold text-lg mx-10 my-5 pt-10">Ecommerce</h1>
                     <div className='w-fit text-gray-400 mx-10'>Welcome back!!!</div>
                     <h1 className='w-fit text-3xl font-bold mx-10 my-5'>Sign in</h1>

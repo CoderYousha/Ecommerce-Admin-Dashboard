@@ -64,7 +64,7 @@ function Categories () {
                          </div>
                          :
                           <div className="float-left w-4/5">
-                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold">Users Management</h1>
+                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg">Categories Management</h1>
                               <div className="w-full">
                                    <div className="grid grid-cols-3 font-bold text-gray-500 mt-5 gap-1 min-w-5 ml-7">
                                         <div className="flex">Category</div>
@@ -79,14 +79,14 @@ function Categories () {
                                                        <div key={index} className="flex py-2">
                                                             <div className="flex">
                                                                  <div className="w-10 h-10 rounded-full bg-light-blue flex justify-center items-center mr-1">
-                                                                      <img src={category.image} />
+                                                                      <img className="w-full h-full rounded-full" src={category.image} />
                                                                  </div>
                                                                  <div className="">
-                                                                      <div className="flex bg-light-blue w-fit h-fit px-1 py-1 rounded-xl font-semibold ml-5">{language == 'en' ? category.name_en : category.name_ar}</div>
+                                                                      <div className="flex bg-light-blue w-fit h-fit px-1 py-1 rounded-xl font-semibold ml-5 max-sm:text-sm">{language == 'en' ? category.name_en : category.name_ar}</div>
                                                                  </div>
                                                             </div>
                                                        </div>
-                                                       <div className="flex">{language == 'en' ? category.description_en : category.description_ar}</div> 
+                                                       <div className="flex max-sm:text-sm">{language == 'en' ? category.description_en : category.description_ar}</div> 
                                                        <div className="flex">
                                                             <FontAwesomeIcon className="mr-3 text-green-500 cursor-pointer" icon={faEdit} onClick={() => navigate(`/update-category/${category.id}`)} />
                                                             {
