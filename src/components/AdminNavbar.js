@@ -1,6 +1,6 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faTachometerAlt, faShoppingCart, faCog, faUsers, faLayerGroup, faDollar, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faShoppingCart, faCog, faUsers, faLayerGroup, faDollar, faDoorOpen, faStore } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/admin_navbar.css';
 import Fetch from '../services/Fetch';
@@ -14,6 +14,7 @@ function AdminNavbar() {
           {name: 'Categories', icon: faLayerGroup, link: '/categories'},
           {name: 'Users', icon: faUsers, link: '/users'},
           {name: 'Currency', icon: faDollar, link: '/currency'},
+          {name: 'Stores', icon: faStore, link: '/stores'},
           {name: 'Settings', icon: faCog, link: '/settings'},
      ];
 
@@ -39,8 +40,8 @@ function AdminNavbar() {
                          {
                               choices.map((choice, index) => 
                                    <div className='choice mt-5 w-full' key={index}>
-                                        <NavLink to={choice.link} className="cursor-pointer py-3 px-5 rounded-xl flex items-center">
-                                             <FontAwesomeIcon icon={choice.icon} className='icon text-2xl text-gray-500 mr-5' />
+                                        <NavLink to={choice.link} className="cursor-pointer py-3 px-5 rounded-xl flex items-center max-sm:justify-center">
+                                             <FontAwesomeIcon icon={choice.icon} className='icon text-2xl text-gray-500 mr-5 max-sm:mr-0' />
                                              <span className='text-lg text-gray-500 max-sm:hidden'>{choice.name}</span>
                                         </NavLink>
                                    </div>

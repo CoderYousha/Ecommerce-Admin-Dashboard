@@ -81,28 +81,28 @@ function UpdateCategory () {
                               <section className="bg-purple-200 w-11/12 mt-10 rounded-l-lg py-3 float-right">
                                    <div className="w-fit px-10 py-3 float-left text-white text-2xl font-bold">+<FontAwesomeIcon icon={faLayerGroup} /></div>
                                    <div className="w-full h-20"></div>
-                                   <div className="flex justify-around">
-                                        <div className="w-2/5 flex flex-col">
-                                             <div className="font-bold w-fit mb-2">English Name</div>
+                                   <div className="flex justify-around max-sm:block max-sm:ml-3 max-sm:text-sm">
+                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
+                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">English Name</div>
                                              <input ref={nameEnRef} defaultValue={category.name_en} type="text" placeholder="Enter english name" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
-                                        <div className="w-2/5 flex flex-col">
-                                             <div className="font-bold w-fit mb-2">Arabic Name</div>
+                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
+                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Arabic Name</div>
                                              <input ref={nameArRef} defaultValue={category.name_ar} type="text" placeholder="Enter arabic name" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
                                    </div>
-                                   <div className="flex justify-around mt-5">
-                                        <div className="w-2/5 flex flex-col">
-                                             <div className="font-bold w-fit mb-2">English Description</div>
+                                   <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
+                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
+                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">English Description</div>
                                              <input ref={descriptionEnRef} defaultValue={category.description_en} type="text" placeholder="Enter english description" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
-                                        <div className="w-2/5 flex flex-col">
-                                             <div className="font-bold w-fit mb-2">Arabic Description</div>
+                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
+                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Arabic Description</div>
                                              <input ref={descriptionArRef} defaultValue={category.description_ar} type="text" placeholder="Enter arabic description" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
                                    </div>
-                                   <div className="flex justify-around mt-5">
-                                        <div className="w-2/5 flex flex-col relative bg-white rounded-lg">
+                                   <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
+                                        <div className="w-2/5 flex flex-col relative bg-white rounded-lg max-sm:w-4/5">
                                              <FontAwesomeIcon icon={faCamera} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-purple-600 w-10"/>
                                              <input accept="image/*" onChange={(e) => setImage(e.target.files[0])} type="file" placeholder="Enter english description" className="w-full h-10 indent-2 rounded-md outline-none opacity-0 cursor-pointer" />
                                         </div>

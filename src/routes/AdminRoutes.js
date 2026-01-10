@@ -1,12 +1,17 @@
 import AddCategory from "../adminPages/AddCategory";
 import AddCurrerncy from "../adminPages/AddCurrency";
+import AddStore from "../adminPages/AddStore";
+import AddStoreAdmin from "../adminPages/AddStoreAdmin";
 import AddUser from "../adminPages/AddUser";
+import AdminsStore from "../adminPages/AdminsStore";
 import Categories from "../adminPages/Categories";
 import Currency from "../adminPages/Currency";
 import Dashboard from "../adminPages/Dashboard";
 import Settings from "../adminPages/Settings";
+import Stores from "../adminPages/Stores";
 import UpdateCategory from "../adminPages/UpdateCategory";
 import UpdateCurrency from "../adminPages/UpdateCurrency";
+import UpdateStore from "../adminPages/UpdateStore";
 import Users from "../adminPages/Users";
 
 function AdminRoutes() {
@@ -50,6 +55,26 @@ function AdminRoutes() {
           {
                'path': '/update-currency/:id',
                'element': <UpdateCurrency />
+          },
+          {
+               'path': '/stores',
+               'element': <Stores />
+          },
+          {
+               'path': '/add-store',
+               'element': <AddStore />
+          },
+          {
+               'path': '/update-store/:id',
+               'element': <UpdateStore />
+          },
+          {
+               'path': '/admins-store/:id',
+               'element': <AdminsStore />
+          },
+          {
+               'path': '/add-store-admin/:id',
+               'element': <AddStoreAdmin />
           },
      ];
 }
