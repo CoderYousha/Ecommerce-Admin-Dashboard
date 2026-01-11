@@ -1,37 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
-import CheckLogin from "../services/CheckLogin";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import Fetch from "../services/Fetch";
 import { faEdit, faLayerGroup, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import toast, { Toaster } from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 function Categories() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
      const language = localStorage.getItem('language') || 'en';
-     const [wait, setWait] = useState(true);
      const [categories, setCategories] = useState([]);
      const [deletingCategoryId, setDeletingCategoryId] = useState(null);
      const navigate = useNavigate();
      const [currentPage, setCurrentPage] = useState(1);
      const [pagination, setPagination] = useState('');
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               await getCategories();
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getCategories = async () => {
+          setWaitGet(true);
           let result = await Fetch(host + `/v1/admin/categories`, "GET", null);
+          setPagination(result.data.data);
           setCategories(result.data.data.data);
+          setWaitGet(false);
      }
 
      const deleteCategory = async (id) => {
@@ -48,7 +42,7 @@ function Categories() {
      }
 
      useEffect(() => {
-          checkLogin();
+          getCategories();
      }, []);
 
      return (
@@ -56,7 +50,7 @@ function Categories() {
                <AdminNavbar />
                <AdminHeader placeholder="Search by name, ..." />
                {
-                    wait ?
+                    wait || waitGet ?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />

@@ -1,41 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
 import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import toast, { Toaster } from "react-hot-toast";
-import CheckLogin from "../services/CheckLogin";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Fetch from "../services/Fetch";
+import AuthContext from "../context/AuthContext";
 
-function UpdateCategory () {
+function UpdateCategory() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const nameEnRef = useRef();
      const nameArRef = useRef();
      const descriptionEnRef = useRef();
      const descriptionArRef = useRef();
      const [image, setImage] = useState(null);
      const [sendWait, setSendWait] = useState(false);
-     const navigate = useNavigate();
      const param = useParams();
      const [category, setCategory] = useState('');
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          }else{
-               await getCategory();
-               setWait(false);
-          }
-     }
+     const { wait } = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getCategory = async () => {
           let result = await Fetch(host + `/v1/admin/categories/${param.id}/show`, "GET", null);
 
           setCategory(result.data.data);
+          setWaitGet(false);
      }
 
      const updateCategory = async () => {
@@ -50,9 +41,9 @@ function UpdateCategory () {
 
           let result = await Fetch(host + `/v1/admin/categories/${param.id}/update`, "POST", formData);
 
-          if(result.status === 200){
+          if (result.status === 200) {
                toast.success("Category updated successfully!");
-          }else if(result.status === 422){
+          } else if (result.status === 422) {
                toast.error(result.data.errors[0]);
           }
 
@@ -60,19 +51,19 @@ function UpdateCategory () {
      }
 
      useEffect(() => {
-          checkLogin();
-     },[]);
+          getCategory();
+     }, []);
 
 
      return (
           <>
                <AdminNavbar />
-               <AdminHeader placeholder="Search by name, email..."/>
+               <AdminHeader placeholder="Search by name, email..." />
                {
-                    wait ?
+                    wait || waitGet?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
-                                   <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                                   <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />
                               </div>
                          </div>
                          :
@@ -103,7 +94,7 @@ function UpdateCategory () {
                                    </div>
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col relative bg-white rounded-lg max-sm:w-4/5">
-                                             <FontAwesomeIcon icon={faCamera} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-purple-600 w-10"/>
+                                             <FontAwesomeIcon icon={faCamera} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-purple-600 w-10" />
                                              <input accept="image/*" onChange={(e) => setImage(e.target.files[0])} type="file" placeholder="Enter english description" className="w-full h-10 indent-2 rounded-md outline-none opacity-0 cursor-pointer" />
                                         </div>
                                    </div>

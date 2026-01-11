@@ -1,36 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import CheckLogin from "../services/CheckLogin";
 import Fetch from "../services/Fetch";
 import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
+import AuthContext from "../context/AuthContext";
 
 function AdminsStore() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const navigate = useNavigate();
-     const [users, setUsers] = useState([]);
-     const [currentPage, setCurrentPage] = useState(1);
-     const [pagination, setPagination] = useState('');
-     const [selectedUser, setSelectedUser] = useState('');
      const [searchWait, setSearchWait] = useState(false);
      const [deletingUserId, setDeletingUserId] = useState(null);
      const locatoin = useLocation();
      const [admins, setAdmins] = useState(locatoin.state.admins || []);
      const param = useParams();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
 
      const deleteAdminStore = async (userId) => {
           setDeletingUserId(userId);
@@ -44,10 +31,6 @@ function AdminsStore() {
 
           setDeletingUserId(null);
      }
-
-     useEffect(() => {
-          checkLogin();
-     }, []);
 
      return (
           <>

@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import CheckLogin from "../services/CheckLogin";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminHeader from "../components/AdminHeader";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,10 +7,10 @@ import Fetch from "../services/Fetch";
 import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faStore } from "@fortawesome/free-solid-svg-icons";
+import AuthContext from "../context/AuthContext";
 
 function UpdateStore() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const nameEnRef = useRef();
      const nameArRef = useRef();
      const [image, setImage] = useState();
@@ -19,17 +18,9 @@ function UpdateStore() {
      const location = useLocation();
      const [isActive, setIsActive] = useState(location.state?.is_active || false);
      const param = useParams();
+     const {wait} = useContext(AuthContext);
 
      const navigate = useNavigate();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               setWait(false);
-          }
-     }
 
      const updateStore = async () => {
           setSendWait(true);
@@ -50,10 +41,6 @@ function UpdateStore() {
 
           setSendWait(false);
      }
-
-     useEffect(() => {
-          checkLogin();
-     }, []);
 
      return (
           <>

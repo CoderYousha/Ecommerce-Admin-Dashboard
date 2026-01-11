@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CheckLogin from "../services/CheckLogin";
 import Fetch from "../services/Fetch";
 import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
@@ -8,10 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminHeader from "../components/AdminHeader";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import AuthContext from "../context/AuthContext";
 
 function AddStoreAdmin() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [sendWait, setSendWait] = useState(false);
      const [name, setName] = useState('');
      const [email, setEmail] = useState('');
@@ -20,17 +19,9 @@ function AddStoreAdmin() {
      const [password, setPassword] = useState('');
      const [passwordConfirmation, setPasswordConfirmation] = useState('');
      const param = useParams();
+     const { wait } = useContext(AuthContext);
 
      const navigate = useNavigate();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               setWait(false);
-          }
-     }
 
      const createUser = async () => {
           setSendWait(true);
@@ -56,9 +47,6 @@ function AddStoreAdmin() {
           setSendWait(false);
      }
 
-     useEffect(() => {
-          checkLogin();
-     }, []);
      return (
           <>
                <AdminNavbar />

@@ -1,34 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollar, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import CheckLogin from "../services/CheckLogin";
 import Fetch from "../services/Fetch";
+import AuthContext from "../context/AuthContext";
 
 function Currency() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const navigate = useNavigate();
      const [currencies, setCurrencies] = useState([]);
      const [deletetingCurrrencyId, setDeletingCurrencyId] = useState(null);
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               await getCurrencies();
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getCurrencies = async () => {
           let result = await Fetch(host + `/v1`, "GET", null);
           setCurrencies(result.data.data);
+          setWaitGet(false);
      }
 
      const deleteCurrency = async (id) => {
@@ -45,7 +37,7 @@ function Currency() {
      }
 
      useEffect(() => {
-          checkLogin();
+          getCurrencies();
      }, []);
 
      return (
@@ -54,7 +46,7 @@ function Currency() {
                <AdminHeader placeholder="Search by name, ..." />
 
                {
-                    wait ?
+                    wait || waitGet ?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />

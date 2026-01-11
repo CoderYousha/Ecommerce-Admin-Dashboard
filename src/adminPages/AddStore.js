@@ -1,32 +1,23 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminHeader from "../components/AdminHeader";
 import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
-import CheckLogin from "../services/CheckLogin";
 import Fetch from "../services/Fetch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faStore } from "@fortawesome/free-solid-svg-icons";
+import AuthContext from "../context/AuthContext";
 
 function AddStore() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [nameEn, setNameEn] = useState('');
      const [nameAr, setNameAr] = useState('');
      const [isActive, setIsActive] = useState(false);
      const [image, setImage] = useState(null);
      const [sendWait, setSendWait] = useState(false);
      const navigate = useNavigate();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
 
      const createStore = async () => {
           setSendWait(true);
@@ -47,10 +38,6 @@ function AddStore() {
 
           setSendWait(false);
      }
-
-     useEffect(() => {
-          checkLogin();
-     }, []);
 
      return (
           <>

@@ -2,38 +2,29 @@ import { ClipLoader } from "react-spinners";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
 import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import CheckLogin from "../services/CheckLogin";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollar } from "@fortawesome/free-solid-svg-icons";
 import Fetch from "../services/Fetch";
+import AuthContext from "../context/AuthContext";
 
-function UpdateCurrency () {
+function UpdateCurrency() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [sendWait, setSendWait] = useState(false);
-     const navigate = useNavigate();
      const [currency, setCurrency] = useState('');
      const param = useParams();
      const codeRef = useRef();
      const symbolRef = useRef();
      const rateOfExchangeRef = useRef();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          }else{
-               await getCurrency();
-               setWait(false);
-          }
-     }
+     const { wait } = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getCurrency = async () => {
           let result = await Fetch(host + `/v1/${param.id}/show`, "GET", null);
-          if(result.status === 200){
+          if (result.status === 200) {
                setCurrency(result.data.data);
+               setWaitGet(false);
           }
      }
 
@@ -47,14 +38,14 @@ function UpdateCurrency () {
 
           let result = await Fetch(host + `/v1/admin/currencies/${param.id}/update`, "POST", formData);
 
-          if(result.status === 200){
+          if (result.status === 200) {
                toast.success("Currency updated successfully!");
-          }else if(result.status === 422){
-               if(result.data.errors.code[0]){
-               toast.error(result.data.errors.code[0]);
-               }else if(result.data.errors.symbol[0]){
+          } else if (result.status === 422) {
+               if (result.data.errors.code[0]) {
+                    toast.error(result.data.errors.code[0]);
+               } else if (result.data.errors.symbol[0]) {
                     toast.error(result.data.errors.symbol[0]);
-               }else if(result.data.errors.rate_of_exchange[0]){
+               } else if (result.data.errors.rate_of_exchange[0]) {
                     toast.error(result.data.errors.rate_of_exchange[0]);
                }
           }
@@ -63,19 +54,19 @@ function UpdateCurrency () {
      }
 
      useEffect(() => {
-          checkLogin();
-     },[]);
+          getCurrency();
+     }, []);
 
      return (
           <>
                <AdminNavbar />
-               <AdminHeader placeholder="Search by name, ..."/>
+               <AdminHeader placeholder="Search by name, ..." />
 
                {
-                    wait ?
+                    wait || waitGet ?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
-                                   <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                                   <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />
                               </div>
                          </div>
                          :

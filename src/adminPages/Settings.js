@@ -1,39 +1,29 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
-import CheckLogin from "../services/CheckLogin";
-import { useNavigate } from "react-router-dom";
 import Fetch from "../services/Fetch";
 import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 function Settings() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [sendWait, setSendWait] = useState(false);
      const [user, setUser] = useState('');
-     const navigate = useNavigate();
      const nameRef = useRef();
      const codeRef = useRef();
      const phoneRef = useRef();
      const emailRef = useRef();
      const languageRef = useRef();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          }else{
-               await getProfile();
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getProfile = async () => {
           let result = await Fetch(host + '/account/get-profile', "GET", null);
           
           if(result.status === 200){
                setUser(result.data.data);
+               setWaitGet(false);
           }
      }
      
@@ -61,7 +51,7 @@ function Settings() {
      }
 
      useEffect(() => {
-          checkLogin();
+          getProfile();
      },[]);
 
      return (
@@ -69,7 +59,7 @@ function Settings() {
                <AdminNavbar />
                <AdminHeader placeholder="Search by name, email..."/>
                {
-                    wait ?
+                    wait || waitGet?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2"/>

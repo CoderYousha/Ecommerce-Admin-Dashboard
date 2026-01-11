@@ -1,17 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
-import { faEdit, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import CheckLogin from "../services/CheckLogin";
+import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Fetch from "../services/Fetch";
 import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 function Users() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const navigate = useNavigate();
      const [users, setUsers] = useState([]);
      const [currentPage, setCurrentPage] = useState(1);
@@ -19,16 +18,8 @@ function Users() {
      const [selectedUser, setSelectedUser] = useState('');
      const [searchWait, setSearchWait] = useState(false);
      const [deletingUserId, setDeletingUserId] = useState(null);
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               await getUsers();
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getUsers = async () => {
           setSearchWait(true);
@@ -39,6 +30,7 @@ function Users() {
           setUsers(result.data.data.data);
 
           setSearchWait(false);
+          setWaitGet(false);
      }
 
      const deleteUser = async (userId) => {
@@ -50,12 +42,12 @@ function Users() {
                await getUsers();
                toast.success("User deleted successfully!");
           }
-
+          
           setDeletingUserId(null);
      }
 
      useEffect(() => {
-          checkLogin();
+          getUsers();
      }, []);
 
      useEffect(() => {
@@ -67,7 +59,7 @@ function Users() {
                <AdminNavbar />
                <AdminHeader placeholder="Search by name, email..." />
                {
-                    wait ?
+                    wait || waitGet?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />

@@ -1,31 +1,22 @@
 import { ClipLoader } from "react-spinners";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { faDollar } from "@fortawesome/free-solid-svg-icons";
 import toast, { Toaster } from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CheckLogin from "../services/CheckLogin";
 import Fetch from "../services/Fetch";
+import AuthContext from "../context/AuthContext";
 
 function AddCurrerncy() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [code, setCode] = useState('');
      const [symbol, setSymbol] = useState('');
      const [rateOfExchange, setRateOfExchange] = useState('');
      const [sendWait, setSendWait] = useState(false);
      const navigate = useNavigate();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          }else{
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
 
      const createCurrency = async () => {
           setSendWait(true);
@@ -51,10 +42,6 @@ function AddCurrerncy() {
 
           setSendWait(false);
      }
-
-     useEffect(() => {
-          checkLogin();
-     },[]);
 
      return (
           <>

@@ -3,32 +3,23 @@ import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
 import { faEdit, faStore, faTrash, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import CheckLogin from "../services/CheckLogin";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import Fetch from "../services/Fetch";
 import toast, { Toaster } from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 function Stores() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
      const language = localStorage.getItem('language');
      const navigate = useNavigate();
-     const [wait, setWait] = useState(true);
      const [stores, setStores] = useState([]);
      const [deletingStoreId, setDeletingStoreId] = useState(null);
      const [currentPage, setCurrentPage] = useState(1);
      const [pagination, setPagination] = useState({});
      const [searchWait, setSearchWait] = useState(false);
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          } else {
-               await getStores();
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
+     const [waitGet, setWaitGet] = useState(true);
 
      const getStores = async () => {
           setSearchWait(true);
@@ -37,6 +28,7 @@ function Stores() {
                setStores(result.data.data.data);
                setPagination(result.data.data);
           }
+          setWaitGet(false);
           setSearchWait(false);
      }
 
@@ -54,7 +46,7 @@ function Stores() {
      }
 
      useEffect(() => {
-          checkLogin();
+          getStores();
      }, []);
 
      useEffect(() => {
@@ -66,7 +58,7 @@ function Stores() {
                <AdminNavbar />
                <AdminHeader />
                {
-                    wait ?
+                    wait || waitGet?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />

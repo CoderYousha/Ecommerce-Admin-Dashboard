@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
 import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import toast, { Toaster } from "react-hot-toast";
-import CheckLogin from "../services/CheckLogin";
 import { useNavigate } from "react-router-dom";
 import Fetch from "../services/Fetch";
+import AuthContext from "../context/AuthContext";
 
 function AddCategory () {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [nameEn, setNameEn] = useState('');
      const [nameAr, setNameAr] = useState('');
      const [descriptionEn, setDescriptionEn] = useState('');
@@ -19,15 +18,7 @@ function AddCategory () {
      const [image, setImage] = useState(null);
      const [sendWait, setSendWait] = useState(false);
      const navigate = useNavigate();
-
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          }else{
-               setWait(false);
-          }
-     }
+     const {wait} = useContext(AuthContext);
 
      const createCategory = async () => {
           setSendWait(true);
@@ -49,11 +40,6 @@ function AddCategory () {
 
           setSendWait(false);
      }
-
-     useEffect(() => {
-          checkLogin();
-     },[]);
-
 
      return (
           <>
