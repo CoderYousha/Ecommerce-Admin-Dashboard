@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import CheckLogin from "../services/CheckLogin";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminHeader from "../components/AdminHeader";
 import { ClipLoader } from "react-spinners";
@@ -8,10 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Fetch from "../services/Fetch";
 import toast, { Toaster } from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 function AddUser() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const [wait, setWait] = useState(true);
      const [sendWait, setSendWait] = useState(false);
      const [name, setName] = useState('');
      const [email, setEmail] = useState('');
@@ -20,17 +19,9 @@ function AddUser() {
      const [accountRole, setAccountRole] = useState('');
      const [password, setPassword] = useState('');
      const [passwordConfirmation, setPasswordConfirmation] = useState('');
-     
-     const navigate = useNavigate();
+     const { wait } = useContext(AuthContext);
 
-     const checkLogin = async () => {
-          let result = await CheckLogin(host);
-          if (!result) {
-               navigate('/login');
-          }else{
-               setWait(false);
-          }
-     }
+     const navigate = useNavigate();
 
      const createUser = async () => {
           setSendWait(true);
@@ -46,27 +37,23 @@ function AddUser() {
 
           let result = await Fetch(host + '/v1/admin/user/store', "POST", formData);
 
-          if(result.status == 200){
+          if (result.status == 200) {
                navigate('/users');
-          }else if(result.status == 422){
+          } else if (result.status == 422) {
                toast.error(result.data.errors[0]);
           }
 
           setSendWait(false);
      }
-
-     useEffect(() => {
-          checkLogin();
-     },[]);
      return (
           <>
                <AdminNavbar />
-               <AdminHeader placeholder="Search by name, email..."/>
+               <AdminHeader placeholder="Search by name, email..." />
                {
                     wait ?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
-                                   <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                                   <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />
                               </div>
                          </div>
                          :
