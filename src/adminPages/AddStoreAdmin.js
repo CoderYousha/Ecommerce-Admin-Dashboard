@@ -14,7 +14,7 @@ function AddStoreAdmin() {
      const [sendWait, setSendWait] = useState(false);
      const [name, setName] = useState('');
      const [email, setEmail] = useState('');
-     const [phoneCode, setPhoneCode] = useState('');
+     const [phoneCode, setPhoneCode] = useState('+963');
      const [phone, setPhone] = useState('');
      const [password, setPassword] = useState('');
      const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -85,10 +85,6 @@ function AddStoreAdmin() {
                                         </div>
                                    </div>
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
-                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
-                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Phone Code</div>
-                                             <input onChange={(e) => setPhoneCode(e.target.value)} type="text" placeholder="Enter phone code" className="w-full h-10 indent-2 rounded-md outline-none" />
-                                        </div>
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Phone</div>
                                              <input onChange={(e) => setPhone(e.target.value)} type="number" placeholder="Enter phone number" className="w-full h-10 indent-2 rounded-md outline-none" />

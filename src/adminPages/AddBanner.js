@@ -6,6 +6,8 @@ import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faScroll } from "@fortawesome/free-solid-svg-icons";
 import Fetch from "../services/Fetch";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function AddBanner() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -17,8 +19,11 @@ function AddBanner() {
      const [isActive, setIsActive] = useState(false);
      const [category, setCategory] = useState('');
      const [categoryId, setCategoryId] = useState('');
+     const navigate = useNavigate();
 
      const createBanner = async() => {
+          sendWait(true);
+
           const formData = new FormData();
           formData.append('name_en', nameEn);
           formData.append('name_ar', nameAr);
@@ -26,6 +31,14 @@ function AddBanner() {
           formData.append('is_active', isActive? 1 : 0);
 
           let result = await Fetch(host + '/v1/admin/banner/store', 'POST', formData);
+
+          if (result.status === 200) {
+               navigate('/banner');
+          } else if (result.status === 422) {
+               toast.error(result.data.errors[0]);
+          }
+
+          sendWait(false);
      }
 
      return (
@@ -78,6 +91,7 @@ function AddBanner() {
                               </section>
                          </div>
                }
+               <Toaster />
           </>
      );
 }
