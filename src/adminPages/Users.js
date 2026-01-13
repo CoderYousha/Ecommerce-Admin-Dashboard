@@ -18,8 +18,18 @@ function Users() {
      const [selectedUser, setSelectedUser] = useState('');
      const [searchWait, setSearchWait] = useState(false);
      const [deletingUserId, setDeletingUserId] = useState(null);
-     const {wait} = useContext(AuthContext);
+     const { wait } = useContext(AuthContext);
      const [waitGet, setWaitGet] = useState(true);
+
+     const openWindow = () => {
+          var window = document.getElementById("delete-window");
+          window.style.display = 'block';
+     }
+
+     const closeWindow = () => {
+          var window = document.getElementById("delete-window");
+          window.style.display = 'none';
+     }
 
      const getUsers = async () => {
           setSearchWait(true);
@@ -33,16 +43,16 @@ function Users() {
           setWaitGet(false);
      }
 
-     const deleteUser = async (userId) => {
-          setDeletingUserId(userId);
+     const deleteUser = async () => {
 
-          let result = await Fetch(host + `/v1/admin/user/${userId}/delete`, "DELETE", null);
+          let result = await Fetch(host + `/v1/admin/user/${deletingUserId}/delete`, "DELETE", null);
 
           if (result.status === 200) {
+               closeWindow();
                await getUsers();
                toast.success("User deleted successfully!");
           }
-          
+
           setDeletingUserId(null);
      }
 
@@ -59,7 +69,7 @@ function Users() {
                <AdminNavbar />
                <AdminHeader placeholder="Search by name, email..." />
                {
-                    wait || waitGet?
+                    wait || waitGet ?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -105,12 +115,12 @@ function Users() {
                                                                       <div style={{ backgroundColor: user.is_active ? '#dcfce7' : '#dcfce7', color: user.is_active ? 'green' : 'red' }} className="flex w-fit h-fit px-1 py-1 rounded-xl font-semibold">{user.is_active ? "Active" : "Inactive"}</div>
                                                                       <div className="flex">
                                                                            {/* <FontAwesomeIcon className="mr-3 text-green-500 cursor-pointer" icon={faEdit} /> */}
-                                                                           {
+                                                                           {/* {
                                                                                 deletingUserId === user.id
                                                                                      ? <ClipLoader color="red" loading={true} size={15} />
-                                                                                     : <FontAwesomeIcon onClick={() => deleteUser(user.id)} className="text-red-500 cursor-pointer" icon={faTrash} />
-                                                                           }
-                                                                      </div>
+                                                                                } */}
+                                                                                <FontAwesomeIcon onClick={() => {setDeletingUserId(user.id); openWindow();}} className="text-red-500 cursor-pointer" icon={faTrash} />
+                                                                                </div>
                                                                  </>
                                                             )
                                                        }
@@ -129,6 +139,16 @@ function Users() {
                                    +
                                    <FontAwesomeIcon icon={faUser} className="" />
                               </button>
+
+                              <div id="delete-window" className="hidden w-full h-full bg-opacity-25 bg-gray-300 absolute top-0 right-0">
+                                   <div className="rounded-lg px-5 py-10 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white w-1/3">
+                                        <div className="text-xl">Are you sure?</div>
+                                        <div className="text-white font-bold mt-10 flex justify-between mx-auto">
+                                             <button onClick={deleteUser} className="bg-red-500 px-10 py-2 rounded-lg">Delete</button>
+                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg">Cancel</button>
+                                        </div>
+                                   </div>
+                              </div>
                          </div>
                }
                <Toaster />

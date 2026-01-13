@@ -85,11 +85,11 @@ function UpdateCategory() {
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">English Description</div>
-                                             <input ref={descriptionEnRef} defaultValue={category.description_en} type="text" placeholder="Enter english description" className="w-full h-10 indent-2 rounded-md outline-none" />
+                                             <textarea ref={descriptionEnRef} defaultValue={category.description_en} type="text" placeholder="Enter english description" className="w-full indent-2 rounded-md outline-none" rows={5}></textarea>
                                         </div>
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Arabic Description</div>
-                                             <input ref={descriptionArRef} defaultValue={category.description_ar} type="text" placeholder="Enter arabic description" className="w-full h-10 indent-2 rounded-md outline-none" />
+                                             <textarea ref={descriptionArRef} defaultValue={category.description_ar} type="text" placeholder="Enter arabic description" className="w-full indent-2 rounded-md outline-none" rows={5}></textarea>
                                         </div>
                                    </div>
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">

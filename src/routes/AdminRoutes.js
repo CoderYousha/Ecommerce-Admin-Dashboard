@@ -1,9 +1,11 @@
+import AddBanner from "../adminPages/AddBanner";
 import AddCategory from "../adminPages/AddCategory";
 import AddCurrerncy from "../adminPages/AddCurrency";
 import AddStore from "../adminPages/AddStore";
 import AddStoreAdmin from "../adminPages/AddStoreAdmin";
 import AddUser from "../adminPages/AddUser";
 import AdminsStore from "../adminPages/AdminsStore";
+import Banner from "../adminPages/Banner";
 import Categories from "../adminPages/Categories";
 import Currency from "../adminPages/Currency";
 import Dashboard from "../adminPages/Dashboard";
@@ -16,10 +18,10 @@ import Users from "../adminPages/Users";
 
 function AdminRoutes() {
      return [
-          {
-               'path': '/dashboard',
-               'element': <Dashboard />
-          },
+          // {
+          //      'path': '/dashboard',
+          //      'element': <Dashboard />
+          // },
           {
                'path': '/users',
                'element': <Users />
@@ -75,6 +77,14 @@ function AdminRoutes() {
           {
                'path': '/add-store-admin/:id',
                'element': <AddStoreAdmin />
+          },
+          {
+               'path': '/banner',
+               'element': <Banner />
+          },
+          {
+               'path': '/add-banner',
+               'element': <AddBanner />
           },
      ];
 }

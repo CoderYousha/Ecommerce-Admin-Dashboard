@@ -1,6 +1,6 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faShoppingCart, faCog, faUsers, faLayerGroup, faDollar, faDoorOpen, faStore } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faShoppingCart, faCog, faUsers, faLayerGroup, faDollar, faDoorOpen, faStore, faScroll } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/admin_navbar.css';
 import Fetch from '../services/Fetch';
@@ -10,11 +10,12 @@ function AdminNavbar() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
      const navigate = useNavigate();
      const choices = [
-          {name: 'Dashboard', icon: faTachometerAlt, link: '/dashboard'},
+          // {name: 'Dashboard', icon: faTachometerAlt, link: '/dashboard'},
           {name: 'Categories', icon: faLayerGroup, link: '/categories'},
           {name: 'Users', icon: faUsers, link: '/users'},
           {name: 'Currency', icon: faDollar, link: '/currency'},
           {name: 'Stores', icon: faStore, link: '/stores'},
+          {name: 'Banner', icon: faScroll, link: '/banner'},
           {name: 'Settings', icon: faCog, link: '/settings'},
      ];
 

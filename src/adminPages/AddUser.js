@@ -14,9 +14,9 @@ function AddUser() {
      const [sendWait, setSendWait] = useState(false);
      const [name, setName] = useState('');
      const [email, setEmail] = useState('');
-     const [phoneCode, setPhoneCode] = useState('');
+     const [phoneCode, setPhoneCode] = useState('+963');
      const [phone, setPhone] = useState('');
-     const [accountRole, setAccountRole] = useState('');
+     const [accountRole, setAccountRole] = useState('client');
      const [password, setPassword] = useState('');
      const [passwordConfirmation, setPasswordConfirmation] = useState('');
      const { wait } = useContext(AuthContext);
@@ -84,22 +84,8 @@ function AddUser() {
                                    </div>
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
-                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Phone Code</div>
-                                             <input onChange={(e) => setPhoneCode(e.target.value)} type="text" placeholder="Enter your phone code" className="w-full h-10 indent-2 rounded-md outline-none" />
-                                        </div>
-                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Phone</div>
                                              <input onChange={(e) => setPhone(e.target.value)} type="number" placeholder="Enter your phone number" className="w-full h-10 indent-2 rounded-md outline-none" />
-                                        </div>
-                                   </div>
-                                   <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
-                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
-                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Account Role</div>
-                                             <select onChange={(e) => setAccountRole(e.target.value)} className="w-full h-10 rounded-md outline-none">
-                                                  <option selected disabled>Select Role</option>
-                                                  <option value="client" className="">Client</option>
-                                                  <option value="store_admin" className="">Seller</option>
-                                             </select>
                                         </div>
                                    </div>
                                    <button onClick={createUser} className="my-8 rounded-md bg-white text-purple-500 px-7 py-2 cursor-pointer font-semibold hover:border hover:border-white hover:text-white hover:bg-purple-200 duration-200">

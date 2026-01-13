@@ -36,7 +36,7 @@ function Login() {
                localStorage.setItem('token', result.data.data.token);
                localStorage.setItem('language', result.data.data.user.language);
                if(result.data.data.user.account_role == 'admin'){
-                    navigate('/dashboard');
+                    navigate('/settings');
                }
           }else if(result.status == 400){
                toast.error("incorrect email or password");

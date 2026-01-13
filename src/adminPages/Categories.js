@@ -17,7 +17,7 @@ function Categories() {
      const navigate = useNavigate();
      const [currentPage, setCurrentPage] = useState(1);
      const [pagination, setPagination] = useState('');
-     const {wait} = useContext(AuthContext);
+     const { wait } = useContext(AuthContext);
      const [waitGet, setWaitGet] = useState(true);
 
      const getCategories = async () => {
@@ -28,10 +28,19 @@ function Categories() {
           setWaitGet(false);
      }
 
-     const deleteCategory = async (id) => {
-          setDeletingCategoryId(id);
+     const openWindow = () => {
+          var window = document.getElementById("delete-window");
+          window.style.display = 'block';
+     }
 
-          let result = await Fetch(host + `/v1/admin/categories/${id}/delete`, "DELETE", null);
+     const closeWindow = () => {
+          var window = document.getElementById("delete-window");
+          window.style.display = 'none';
+     }
+
+     const deleteCategory = async () => {
+
+          let result = await Fetch(host + `/v1/admin/categories/${deletingCategoryId}/delete`, "DELETE", null);
 
           if (result.status === 200) {
                await getCategories();
@@ -85,11 +94,11 @@ function Categories() {
                                                                  <div className="flex max-sm:text-sm">{language == 'en' ? category.description_en : category.description_ar}</div>
                                                                  <div className="flex">
                                                                       <FontAwesomeIcon className="mr-3 text-green-500 cursor-pointer" icon={faEdit} onClick={() => navigate(`/update-category/${category.id}`)} />
-                                                                      {
+                                                                      {/* {
                                                                            deletingCategoryId === category.id
                                                                                 ? <ClipLoader color="red" loading={true} size={15} />
-                                                                                : <FontAwesomeIcon onClick={() => deleteCategory(category.id)} className="text-red-500 cursor-pointer" icon={faTrash} />
-                                                                      }
+                                                                           } */}
+                                                                           <FontAwesomeIcon onClick={() => {setDeletingCategoryId(category.id); openWindow();}} className="text-red-500 cursor-pointer" icon={faTrash} />
                                                                  </div>
                                                             </>
                                                        )
@@ -109,6 +118,16 @@ function Categories() {
                                    +
                                    <FontAwesomeIcon icon={faLayerGroup} className="" />
                               </button>
+
+                              <div id="delete-window" className="hidden w-full h-full bg-opacity-25 bg-gray-300 absolute top-0 right-0">
+                                   <div className="rounded-lg px-5 py-10 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white w-1/3">
+                                        <div className="text-xl">Are you sure?</div>
+                                        <div className="text-white font-bold mt-10 flex justify-between mx-auto">
+                                             <button onClick={deleteCategory} className="bg-red-500 px-10 py-2 rounded-lg">Delete</button>
+                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg">Cancel</button>
+                                        </div>
+                                   </div>
+                              </div>
                          </div>
                }
                <Toaster />

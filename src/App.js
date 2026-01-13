@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import './styles/colors.css';
 import AdminRoutes from './routes/AdminRoutes';
@@ -12,6 +12,7 @@ function App() {
         <AuthProvider role="admin">
           <Routes>
             <Route path='/login' element={<Login />}></Route>
+            <Route path='/' element={<Navigate to='/login' />}/>
             {
               AdminRoutes().map((route, index) => (
                 <Route path={route.path} element={route.element} key={index}></Route>

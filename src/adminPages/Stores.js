@@ -18,8 +18,18 @@ function Stores() {
      const [currentPage, setCurrentPage] = useState(1);
      const [pagination, setPagination] = useState({});
      const [searchWait, setSearchWait] = useState(false);
-     const {wait} = useContext(AuthContext);
+     const { wait } = useContext(AuthContext);
      const [waitGet, setWaitGet] = useState(true);
+
+     const openWindow = () => {
+          var window = document.getElementById("delete-window");
+          window.style.display = 'block';
+     }
+
+     const closeWindow = () => {
+          var window = document.getElementById("delete-window");
+          window.style.display = 'none';
+     }
 
      const getStores = async () => {
           setSearchWait(true);
@@ -32,12 +42,12 @@ function Stores() {
           setSearchWait(false);
      }
 
-     const deleteStore = async (id) => {
-          setDeletingStoreId(id);
+     const deleteStore = async () => {
 
-          let result = await Fetch(host + `/v1/admin/stores/${id}/delete`, "DELETE", null);
+          let result = await Fetch(host + `/v1/admin/stores/${deletingStoreId}/delete`, "DELETE", null);
 
           if (result.status === 200) {
+               closeWindow();
                await getStores();
                toast.success("Store deleted successfully!");
           }
@@ -58,7 +68,7 @@ function Stores() {
                <AdminNavbar />
                <AdminHeader />
                {
-                    wait || waitGet?
+                    wait || waitGet ?
                          <div className="h-screen">
                               <div className="w-4/5 h-3/4 float-left relative">
                                    <ClipLoader color="purple" loading={true} size={70} className="absolute top-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -94,12 +104,12 @@ function Stores() {
                                                                  </div>
                                                                  <div className="flex">
                                                                       <FontAwesomeIcon onClick={() => navigate(`/update-store/${store.id}`, { state: { name_en: store.name_en, name_ar: store.name_ar, is_active: store.is_active } })} className="text-green-500 cursor-pointer" icon={faEdit} />
-                                                                      {
+                                                                      {/* {
                                                                            deletingStoreId === store.id
                                                                                 ? <ClipLoader color="red" loading={true} size={15} />
-                                                                                : <FontAwesomeIcon onClick={() => deleteStore(store.id)} className="text-red-500 cursor-pointer mx-1" icon={faTrash} />
-                                                                      }
-                                                                      <FontAwesomeIcon onClick={() => navigate(`/admins-store/${store.id}`, {state: {admins: store.admins}})} className="mr-3 text-purple-500 cursor-pointer" icon={faUsers} />
+                                                                           } */}
+                                                                      <FontAwesomeIcon onClick={() => { setDeletingStoreId(store.id); openWindow(); }} className="text-red-500 cursor-pointer mx-1" icon={faTrash} />
+                                                                      <FontAwesomeIcon onClick={() => navigate(`/admins-store/${store.id}`, { state: { admins: store.admins } })} className="mr-3 text-purple-500 cursor-pointer" icon={faUsers} />
                                                                  </div>
                                                             </>
                                                        )
@@ -117,6 +127,16 @@ function Stores() {
                                    +
                                    <FontAwesomeIcon icon={faStore} className="" />
                               </button>
+
+                              <div id="delete-window" className="hidden w-full h-full bg-opacity-25 bg-gray-300 absolute top-0 right-0">
+                                   <div className="rounded-lg px-5 py-10 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white w-1/3">
+                                        <div className="text-xl">Are you sure?</div>
+                                        <div className="text-white font-bold mt-10 flex justify-between mx-auto">
+                                             <button onClick={deleteStore} className="bg-red-500 px-10 py-2 rounded-lg">Delete</button>
+                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg">Cancel</button>
+                                        </div>
+                                   </div>
+                              </div>
                          </div>
                }
                <Toaster />
