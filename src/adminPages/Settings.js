@@ -11,7 +11,6 @@ function Settings() {
      const [sendWait, setSendWait] = useState(false);
      const [user, setUser] = useState('');
      const nameRef = useRef();
-     const codeRef = useRef();
      const phoneRef = useRef();
      const emailRef = useRef();
      const languageRef = useRef();
@@ -32,7 +31,7 @@ function Settings() {
 
           const formData = new FormData();
           formData.append('name', nameRef.current.value);
-          formData.append('phone_code', codeRef.current.value);
+          formData.append('phone_code', '+963');
           formData.append('phone', phoneRef.current.value);
           formData.append('language', languageRef.current.value);
 
@@ -83,15 +82,9 @@ function Settings() {
                                    </div>
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
-                                             <div className="font-bold w-fit mb-2 max-sm:my-2">Phone Code</div>
-                                             <input ref={codeRef} defaultValue={user.phone_code} type="text" placeholder="Enter your phone code" className="w-full h-10 indent-2 rounded-md outline-none" />
-                                        </div>
-                                        <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:my-2">Phone</div>
                                              <input ref={phoneRef} defaultValue={user.phone} type="number" placeholder="Enter your phone number" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
-                                   </div>
-                                   <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2">Language</div>
                                              <select ref={languageRef} className="w-full h-10 rounded-md outline-none">

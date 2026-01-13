@@ -88,7 +88,7 @@ function UpdateCurrency() {
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Rate of Exchange</div>
-                                             <input ref={rateOfExchangeRef} defaultValue={currency.rate_of_exchange} type="text" placeholder="Enter rate of exchange" className="w-full h-10 indent-2 rounded-md outline-none" />
+                                             <input ref={rateOfExchangeRef} defaultValue={currency.rate_of_exchange} type="number" placeholder="Enter rate of exchange" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
                                    </div>
                                    <button onClick={updateCurrency} className="my-8 rounded-md bg-white text-purple-500 px-7 py-2 cursor-pointer font-semibold hover:border hover:border-white hover:text-white hover:bg-purple-200 duration-200">
