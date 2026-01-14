@@ -8,6 +8,7 @@ import { ClipLoader } from "react-spinners";
 import Fetch from "../services/Fetch";
 import toast, { Toaster } from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import { FormattedMessage } from "react-intl";
 
 function Stores() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -49,7 +50,7 @@ function Stores() {
           if (result.status === 200) {
                closeWindow();
                await getStores();
-               toast.success("Store deleted successfully!");
+               toast.success(<FormattedMessage id='deleted' />);
           }
 
           setDeletingStoreId(null);
@@ -76,16 +77,16 @@ function Stores() {
                          </div>
                          :
                          <div className="float-left w-4/5">
-                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg">Stores Management</h1>
+                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg"><FormattedMessage id='storesManagement' /></h1>
                               <div className="w-full">
                                    <div className="w-full overflow-x-auto">
                                         <div className="min-w-[900px]">
 
                                              <div className="grid grid-cols-4 font-bold text-gray-500 mt-5 gap-1 min-w-5 ml-7">
-                                                  <div className="flex">Image</div>
-                                                  <div className="flex">Name</div>
-                                                  <div className="flex">Status</div>
-                                                  <div className="flex">Actions</div>
+                                                  <div className="flex"><FormattedMessage id='image' /></div>
+                                                  <div className="flex"><FormattedMessage id='name' /></div>
+                                                  <div className="flex"><FormattedMessage id='status' /></div>
+                                                  <div className="flex"><FormattedMessage id='actions' /></div>
                                              </div>
                                              <hr className="my-5" />
                                              <div className="grid grid-cols-4 mt-5 gap-1 gap-y-5 min-w-5 ml-7">
@@ -103,11 +104,7 @@ function Stores() {
                                                                       <div className="w-4 h-4 rounded-full" style={{ backgroundColor: store.is_active ? "green" : "red" }}></div>
                                                                  </div>
                                                                  <div className="flex">
-                                                                      <FontAwesomeIcon onClick={() => navigate(`/update-store/${store.id}`, { state: { name_en: store.name_en, name_ar: store.name_ar, is_active: store.is_active } })} className="text-green-500 cursor-pointer" icon={faEdit} />
-                                                                      {/* {
-                                                                           deletingStoreId === store.id
-                                                                                ? <ClipLoader color="red" loading={true} size={15} />
-                                                                           } */}
+                                                                      <FontAwesomeIcon onClick={() => navigate(`/update-store/${store.id}`, { state: { name_en: store.name_en, name_ar: store.name_ar, is_active: store.is_active, image: store.image } })} className="text-green-500 cursor-pointer" icon={faEdit} />
                                                                       <FontAwesomeIcon onClick={() => { setDeletingStoreId(store.id); openWindow(); }} className="text-red-500 cursor-pointer mx-1" icon={faTrash} />
                                                                       <FontAwesomeIcon onClick={() => navigate(`/admins-store/${store.id}`, { state: { admins: store.admins } })} className="mr-3 text-purple-500 cursor-pointer" icon={faUsers} />
                                                                  </div>
@@ -118,8 +115,8 @@ function Stores() {
                                         </div>
                                    </div>
                                    <div className="w-1/6 flex justify-between mx-auto">
-                                        <button disabled={!pagination.prev_page_url} onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200">Previous</button>
-                                        <button disabled={!pagination.next_page_url} onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200">Next</button>
+                                        <button disabled={!pagination.prev_page_url} onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200"><FormattedMessage id='prev' /></button>
+                                        <button disabled={!pagination.next_page_url} onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200"><FormattedMessage id='next' /></button>
                                    </div>
                               </div>
 
@@ -130,10 +127,10 @@ function Stores() {
 
                               <div id="delete-window" className="hidden w-full h-full bg-opacity-25 bg-gray-300 absolute top-0 right-0">
                                    <div className="rounded-lg px-5 py-10 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white w-1/3">
-                                        <div className="text-xl">Are you sure?</div>
+                                        <div className="text-xl"><FormattedMessage id='sure' /></div>
                                         <div className="text-white font-bold mt-10 flex justify-between mx-auto">
-                                             <button onClick={deleteStore} className="bg-red-500 px-10 py-2 rounded-lg">Delete</button>
-                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg">Cancel</button>
+                                             <button onClick={deleteStore} className="bg-red-500 px-10 py-2 rounded-lg"><FormattedMessage id='delete' /></button>
+                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg"><FormattedMessage id='cancel' /></button>
                                         </div>
                                    </div>
                               </div>

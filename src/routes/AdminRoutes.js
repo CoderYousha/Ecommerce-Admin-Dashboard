@@ -11,8 +11,10 @@ import Currency from "../adminPages/Currency";
 import Dashboard from "../adminPages/Dashboard";
 import Settings from "../adminPages/Settings";
 import Stores from "../adminPages/Stores";
+import UpdateBanner from "../adminPages/UpdateBanner";
 import UpdateCategory from "../adminPages/UpdateCategory";
 import UpdateCurrency from "../adminPages/UpdateCurrency";
+import UpdatePassword from "../adminPages/UpdatePassword";
 import UpdateStore from "../adminPages/UpdateStore";
 import Users from "../adminPages/Users";
 
@@ -85,6 +87,14 @@ function AdminRoutes() {
           {
                'path': '/add-banner',
                'element': <AddBanner />
+          },
+          {
+               'path': '/update-banner/:id',
+               'element': <UpdateBanner />
+          },
+          {
+               'path': '/update-password',
+               'element': <UpdatePassword />
           },
      ];
 }

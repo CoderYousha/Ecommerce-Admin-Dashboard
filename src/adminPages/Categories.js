@@ -8,6 +8,7 @@ import { faEdit, faLayerGroup, faTrash } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import toast, { Toaster } from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import { FormattedMessage } from "react-intl";
 
 function Categories() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -39,12 +40,11 @@ function Categories() {
      }
 
      const deleteCategory = async () => {
-
           let result = await Fetch(host + `/v1/admin/categories/${deletingCategoryId}/delete`, "DELETE", null);
 
           if (result.status === 200) {
                await getCategories();
-               toast.success("Category deleted successfully!");
+               toast.success(<FormattedMessage id='deleted' />);
           }
 
           setDeletingCategoryId(null);
@@ -67,14 +67,14 @@ function Categories() {
                          </div>
                          :
                          <div className="float-left w-4/5">
-                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg">Categories Management</h1>
+                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg"><FormattedMessage id='catsManagement' /></h1>
                               <div className="w-full">
                                    <div className="w-full overflow-x-auto">
                                         <div className="min-w-[900px]">
                                              <div className="grid grid-cols-3 font-bold text-gray-500 mt-5 gap-1 min-w-5 ml-7 max-sm:text-sm">
-                                                  <div className="flex">Category</div>
-                                                  <div className="flex">Description</div>
-                                                  <div className="flex">Actions</div>
+                                                  <div className="flex"><FormattedMessage id='category' /></div>
+                                                  <div className="flex"><FormattedMessage id='description' /></div>
+                                                  <div className="flex"><FormattedMessage id='actions' /></div>
                                              </div>
                                              <hr className="my-5" />
                                              <div className="grid grid-cols-3 mt-5 gap-1 ml-7">
@@ -94,11 +94,7 @@ function Categories() {
                                                                  <div className="flex max-sm:text-sm">{language == 'en' ? category.description_en : category.description_ar}</div>
                                                                  <div className="flex">
                                                                       <FontAwesomeIcon className="mr-3 text-green-500 cursor-pointer" icon={faEdit} onClick={() => navigate(`/update-category/${category.id}`)} />
-                                                                      {/* {
-                                                                           deletingCategoryId === category.id
-                                                                                ? <ClipLoader color="red" loading={true} size={15} />
-                                                                           } */}
-                                                                           <FontAwesomeIcon onClick={() => {setDeletingCategoryId(category.id); openWindow();}} className="text-red-500 cursor-pointer" icon={faTrash} />
+                                                                      <FontAwesomeIcon onClick={() => { setDeletingCategoryId(category.id); openWindow(); }} className="text-red-500 cursor-pointer" icon={faTrash} />
                                                                  </div>
                                                             </>
                                                        )
@@ -110,8 +106,8 @@ function Categories() {
                                    </div>
 
                                    <div className="w-1/6 flex justify-between mx-auto">
-                                        <button disabled={!pagination.prev_page_url} onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200">Previous</button>
-                                        <button disabled={!pagination.next_page_url} onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200">Next</button>
+                                        <button disabled={!pagination.prev_page_url} onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200"><FormattedMessage id='prev' /></button>
+                                        <button disabled={!pagination.next_page_url} onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200"><FormattedMessage id='next' /></button>
                                    </div>
                               </div>
                               <button onClick={() => navigate('/add-category')} className="fixed bottom-10 right-10 w-12 h-12 rounded-full bg-purple-light-color flex justify-center items-center text-white text-2xl shadow-lg hover:bg-purple-500 duration-200 cursor-pointer">
@@ -121,10 +117,10 @@ function Categories() {
 
                               <div id="delete-window" className="hidden w-full h-full bg-opacity-25 bg-gray-300 absolute top-0 right-0">
                                    <div className="rounded-lg px-5 py-10 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white w-1/3">
-                                        <div className="text-xl">Are you sure?</div>
+                                        <div className="text-xl"><FormattedMessage id='sure' /></div>
                                         <div className="text-white font-bold mt-10 flex justify-between mx-auto">
-                                             <button onClick={deleteCategory} className="bg-red-500 px-10 py-2 rounded-lg">Delete</button>
-                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg">Cancel</button>
+                                             <button onClick={deleteCategory} className="bg-red-500 px-10 py-2 rounded-lg"><FormattedMessage id='delete' /></button>
+                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg"><FormattedMessage id='cancel' /></button>
                                         </div>
                                    </div>
                               </div>

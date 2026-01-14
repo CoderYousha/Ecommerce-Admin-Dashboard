@@ -8,6 +8,7 @@ import Fetch from "../services/Fetch";
 import { ClipLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import { FormattedMessage } from "react-intl";
 
 function Users() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -50,7 +51,7 @@ function Users() {
           if (result.status === 200) {
                closeWindow();
                await getUsers();
-               toast.success("User deleted successfully!");
+               toast.success(<FormattedMessage id='deleted' />);
           }
 
           setDeletingUserId(null);
@@ -77,20 +78,20 @@ function Users() {
                          </div>
                          :
                          <div className="float-left w-4/5">
-                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg">Users Management</h1>
+                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg"><FormattedMessage id='usersManagement' /></h1>
                               <div className="w-full">
-                                   <div className="ml-5 py-2 px-2 bg-gray-200 rounded-2xl flex justify-between w-1/4 mt-3 max-sm:text-sm max-sm:w-3/4">
-                                        <div onClick={() => setSelectedUser('')} style={{ backgroundColor: selectedUser === '' ? 'white' : '' }} className="rounded-full px-2 py-1 cursor-pointer">All Users</div>
-                                        <div onClick={() => setSelectedUser('client')} style={{ backgroundColor: selectedUser === 'client' ? 'white' : '' }} className="rounded-full px-2 py-1 cursor-pointer hover:bg-white duration-100">Customers</div>
-                                        <div onClick={() => setSelectedUser('store_admin')} style={{ backgroundColor: selectedUser === 'store_admin' ? 'white' : '' }} className="rounded-full px-2 py-1 cursor-pointer hover:bg-white duration-100">Sellers</div>
+                                   <div className="ml-5 py-2 px-2 bg-gray-200 rounded-2xl flex justify-between w-1/3 mt-3 max-sm:text-sm max-sm:w-3/4">
+                                        <div onClick={() => setSelectedUser('')} style={{ backgroundColor: selectedUser === '' ? 'white' : '' }} className="rounded-full px-2 py-1 cursor-pointer"><FormattedMessage id='allUsers' /></div>
+                                        <div onClick={() => setSelectedUser('client')} style={{ backgroundColor: selectedUser === 'client' ? 'white' : '' }} className="rounded-full px-2 py-1 cursor-pointer hover:bg-white duration-100"><FormattedMessage id='customers' /></div>
+                                        <div onClick={() => setSelectedUser('store_admin')} style={{ backgroundColor: selectedUser === 'store_admin' ? 'white' : '' }} className="rounded-full px-2 py-1 cursor-pointer hover:bg-white duration-100"><FormattedMessage id='sellers' /></div>
                                    </div>
                                    <div className="w-full overflow-x-auto">
                                         <div className="min-w-[900px]">
                                              <div className="grid grid-cols-5 font-bold text-gray-500 mt-5 gap-1 min-w-5 ml-7">
-                                                  <div className="flex">User</div>
-                                                  <div className="flex justify-center">Role</div>
-                                                  <div className="flex justify-center">Status</div>
-                                                  <div className="flex justify-end">Actions</div>
+                                                  <div className="flex"><FormattedMessage id='user' /></div>
+                                                  <div className="flex justify-center"><FormattedMessage id='role' /></div>
+                                                  <div className="flex justify-center"><FormattedMessage id='status' /></div>
+                                                  <div className="flex justify-end"><FormattedMessage id='actions' /></div>
                                              </div>
                                              <hr className="my-5" />
                                              {
@@ -111,16 +112,11 @@ function Users() {
                                                                                 </div>
                                                                            </div>
                                                                       </div>
-                                                                      <div className="flex bg-light-blue w-fit h-fit px-1 py-1 rounded-xl font-semibold ml-5">{user.account_role}</div>
-                                                                      <div style={{ backgroundColor: user.is_active ? '#dcfce7' : '#dcfce7', color: user.is_active ? 'green' : 'red' }} className="flex w-fit h-fit px-1 py-1 rounded-xl font-semibold">{user.is_active ? "Active" : "Inactive"}</div>
+                                                                      <div className="flex bg-light-blue w-fit h-fit px-1 py-1 rounded-xl font-semibold ml-5"><FormattedMessage id={user.account_role} /></div>
+                                                                      <div style={{ backgroundColor: user.is_active ? '#dcfce7' : '#dcfce7', color: user.is_active ? 'green' : 'red' }} className="flex w-fit h-fit px-1 py-1 rounded-xl font-semibold">{user.is_active ? <FormattedMessage id='active' /> : <FormattedMessage id='inactive' />}</div>
                                                                       <div className="flex">
-                                                                           {/* <FontAwesomeIcon className="mr-3 text-green-500 cursor-pointer" icon={faEdit} /> */}
-                                                                           {/* {
-                                                                                deletingUserId === user.id
-                                                                                     ? <ClipLoader color="red" loading={true} size={15} />
-                                                                                } */}
-                                                                                <FontAwesomeIcon onClick={() => {setDeletingUserId(user.id); openWindow();}} className="text-red-500 cursor-pointer" icon={faTrash} />
-                                                                                </div>
+                                                                           <FontAwesomeIcon onClick={() => { setDeletingUserId(user.id); openWindow(); }} className="text-red-500 cursor-pointer" icon={faTrash} />
+                                                                      </div>
                                                                  </>
                                                             )
                                                        }
@@ -131,8 +127,8 @@ function Users() {
                                         </div>
                                    </div>
                                    <div className="w-1/6 flex justify-between mx-auto">
-                                        <button disabled={!pagination.prev_page_url} onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200">Previous</button>
-                                        <button disabled={!pagination.next_page_url} onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200">Next</button>
+                                        <button disabled={!pagination.prev_page_url} onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200"><FormattedMessage id='prev' /></button>
+                                        <button disabled={!pagination.next_page_url} onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer px-5 py-1 rounded-md bg-gray-200"><FormattedMessage id='next' /></button>
                                    </div>
                               </div>
                               <button onClick={() => navigate('/add-user')} className="fixed bottom-10 right-10 w-12 h-12 rounded-full bg-purple-light-color flex justify-center items-center text-white text-2xl shadow-lg hover:bg-purple-500 duration-200 cursor-pointer">
@@ -142,10 +138,10 @@ function Users() {
 
                               <div id="delete-window" className="hidden w-full h-full bg-opacity-25 bg-gray-300 absolute top-0 right-0">
                                    <div className="rounded-lg px-5 py-10 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white w-1/3">
-                                        <div className="text-xl">Are you sure?</div>
+                                        <div className="text-xl"><FormattedMessage id='sure' /></div>
                                         <div className="text-white font-bold mt-10 flex justify-between mx-auto">
-                                             <button onClick={deleteUser} className="bg-red-500 px-10 py-2 rounded-lg">Delete</button>
-                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg">Cancel</button>
+                                             <button onClick={deleteUser} className="bg-red-500 px-10 py-2 rounded-lg"><FormattedMessage id='delete' /></button>
+                                             <button onClick={() => closeWindow()} className="bg-gray-200 px-10 py-2 rounded-lg"><FormattedMessage id='cancel' /></button>
                                         </div>
                                    </div>
                               </div>

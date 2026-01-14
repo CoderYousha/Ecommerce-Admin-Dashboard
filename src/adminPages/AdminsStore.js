@@ -8,6 +8,7 @@ import { ClipLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import AuthContext from "../context/AuthContext";
+import { FormattedMessage } from "react-intl";
 
 function AdminsStore() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -36,7 +37,7 @@ function AdminsStore() {
           if (result.status === 200) {
                closeWindow();
                setAdmins(prev => prev.filter(user => user.id !== deletingUserId));
-               toast.success("User deleted successfully!");
+               toast.success(<FormattedMessage id='deleted' />);
           }
 
           setDeletingUserId(null);
@@ -55,15 +56,15 @@ function AdminsStore() {
                          </div>
                          :
                          <div className="float-left w-4/5">
-                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg">Admins Store Management</h1>
+                              <h1 className="w-fit ml-5 mt-5 text-2xl font-bold max-sm:text-lg"><FormattedMessage id='adminsStoreManage' /></h1>
                               <div className="w-full">
                                    <div className="w-full overflow-x-auto">
                                         <div className="min-w-[900px]">
                                              <div className="grid grid-cols-5 font-bold text-gray-500 mt-5 gap-1 min-w-5 ml-7">
-                                                  <div className="flex">User</div>
-                                                  <div className="flex justify-center">Role</div>
-                                                  <div className="flex justify-center">Status</div>
-                                                  <div className="flex justify-end">Actions</div>
+                                                  <div className="flex"><FormattedMessage id='user' /></div>
+                                                  <div className="flex justify-center"><FormattedMessage id='role' /></div>
+                                                  <div className="flex justify-center"><FormattedMessage id='status' /></div>
+                                                  <div className="flex justify-end"><FormattedMessage id='actions' /></div>
                                              </div>
                                              <hr className="my-5" />
                                              {
@@ -84,14 +85,9 @@ function AdminsStore() {
                                                                                 </div>
                                                                            </div>
                                                                       </div>
-                                                                      <div className="flex bg-light-blue w-fit h-fit px-1 py-1 rounded-xl font-semibold ml-5">{user.account_role}</div>
-                                                                      <div style={{ backgroundColor: user.is_active ? '#dcfce7' : '#dcfce7', color: user.is_active ? 'green' : 'red' }} className="flex w-fit h-fit px-1 py-1 rounded-xl font-semibold">{user.is_active ? "Active" : "Inactive"}</div>
+                                                                      <div className="flex bg-light-blue w-fit h-fit px-1 py-1 rounded-xl font-semibold ml-5"><FormattedMessage id={user.account_role} /></div>
+                                                                      <div style={{ backgroundColor: user.is_active ? '#dcfce7' : '#dcfce7', color: user.is_active ? 'green' : 'red' }} className="flex w-fit h-fit px-1 py-1 rounded-xl font-semibold">{user.is_active ? <FormattedMessage id='active' /> : <FormattedMessage id='inactive' />}</div>
                                                                       <div className="flex">
-                                                                           {/* <FontAwesomeIcon className="mr-3 text-green-500 cursor-pointer" icon={faEdit} /> */}
-                                                                           {/* {
-                                                                                deletingUserId === user.id
-                                                                                     ? <ClipLoader color="red" loading={true} size={15} />
-                                                                                } */}
                                                                            <FontAwesomeIcon
                                                                                 onClick={() => { setDeletingUserId(user.id); openWindow(); }}
                                                                                 className="text-red-500 cursor-pointer" icon={faTrash} />

@@ -1,33 +1,47 @@
 import { useContext, useEffect, useState } from "react";
 import AdminHeader from "../components/AdminHeader";
 import AdminNavbar from "../components/AdminNavbar";
-import AuthContext from "../context/AuthContext";
 import { ClipLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
+import Fetch from "../services/Fetch";
+import AuthContext from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faScroll } from "@fortawesome/free-solid-svg-icons";
-import Fetch from "../services/Fetch";
-import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 import { AsyncPaginate } from "react-select-async-paginate";
+import { useLocation, useParams } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 
-function AddBanner() {
+function UpdateBanner() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
      const language = localStorage.getItem('language');
+     const location = useLocation();
      const { wait } = useContext(AuthContext);
      const [sendWait, setSendWait] = useState(false);
-     const [nameEn, setNameEn] = useState('');
-     const [nameAr, setNameAr] = useState('');
+     const [nameEn, setNameEn] = useState(location.state.name_en);
+     const [nameAr, setNameAr] = useState(location.state.name_ar);
      const [image, setImage] = useState('');
-     const [isActive, setIsActive] = useState(false);
-     const [category, setCategory] = useState('product');
-     const [categoryId, setCategoryId] = useState('');
+     const [isActive, setIsActive] = useState(location.state.is_active);
+     const [category, setCategory] = useState(location.state.category);
+     const [categoryId, setCategoryId] = useState(location.state.category_id);
      const [categoriesType, setCategoriesType] = useState([]);
      const [value, setValue] = useState('');
      const [option, setOption] = useState('');
-     const navigate = useNavigate();
+     const param = useParams();
 
-     const createBanner = async () => {
+     function viewImage(event) {
+          const previewImage = document.getElementById('image');
+
+          const file = event.target.files[0];
+          if (file) {
+               const reader = new FileReader();
+               reader.addEventListener("load", function () {
+                    previewImage.setAttribute("src", this.result);
+               });
+               reader.readAsDataURL(file);
+          }
+     }
+
+     const updateBanner = async () => {
           setSendWait(true);
 
           const formData = new FormData();
@@ -35,13 +49,15 @@ function AddBanner() {
           formData.append('name_ar', nameAr);
           formData.append('category', category);
           formData.append('category_id', categoryId);
-          formData.append('image', image);
           formData.append('is_active', isActive ? 1 : 0);
+          if(image){
+               formData.append('image', image);
+          }
 
-          let result = await Fetch(host + '/v1/admin/banner/store', 'POST', formData);
+          let result = await Fetch(host + `/v1/admin/banner/${param.id}/update`, 'POST', formData);
 
           if (result.status === 200) {
-               navigate('/banner');
+               toast.success(<FormattedMessage id='updated' />);
           } else if (result.status === 422) {
                toast.error(result.data.errors[0]);
           }
@@ -83,6 +99,7 @@ function AddBanner() {
 
      useEffect(() => {
           getCategories(category);
+          
      }, [category]);
 
      return (
@@ -98,18 +115,21 @@ function AddBanner() {
                          </div>
                          :
                          <div className="w-4/5 float-left">
-                              <h1 className="flex font-bold text-3xl ml-5 mt-7"><FormattedMessage id='addBanner' /></h1>
-                              <section className="bg-purple-200 w-11/12 mt-10 rounded-l-lg py-3 float-right">
+                              <h1 className="flex font-bold text-3xl ml-5 mt-7"><FormattedMessage id='updateBanner' /></h1>
+                              <section className="bg-purple-200 w-11/12 mt-10 rounded-l-lg py-3 float-right relative">
+                                   <div className="absolute top-1 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full border border-pink-200">
+                                        <img id="image" src={location.state.image} className="w-full h-full rounded-full" />
+                                   </div>
                                    <div className="w-fit px-10 py-3 float-left text-white text-2xl font-bold">+<FontAwesomeIcon icon={faScroll} /></div>
                                    <div className="w-full h-20"></div>
                                    <div className="flex justify-around max-sm:block max-sm:ml-3 max-sm:text-sm">
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2"><FormattedMessage id='enName' /></div>
-                                             <input onChange={(e) => setNameEn(e.target.value)} type="text" placeholder="Enter english name" className="w-full h-10 indent-2 rounded-md outline-none" />
+                                             <input defaultValue={location.state.name_en} onChange={(e) => setNameEn(e.target.value)} type="text" placeholder="Enter english name" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2"><FormattedMessage id='arName' /></div>
-                                             <input onChange={(e) => setNameAr(e.target.value)} type="text" placeholder="Enter arabic name" className="w-full h-10 indent-2 rounded-md outline-none" />
+                                             <input defaultValue={location.state.name_ar} onChange={(e) => setNameAr(e.target.value)} type="text" placeholder="Enter arabic name" className="w-full h-10 indent-2 rounded-md outline-none" />
                                         </div>
                                    </div>
                                    <div className="flex justify-around mt-5 max-sm:block max-sm:ml-3 max-sm:text-sm">
@@ -117,13 +137,14 @@ function AddBanner() {
                                              <div className="font-bold w-2/3 mb-2"><FormattedMessage id='isActive' /></div>
                                              <input
                                                   type="checkbox"
+                                                  checked={isActive}
                                                   onChange={e => setIsActive(e.target.checked)}
                                                   className="w-5 h-5 indent-2 rounded-md outline-none"
                                              />
                                         </div>
                                         <div className="w-2/5 flex flex-col relative bg-white rounded-lg max-sm:w-4/5">
                                              <FontAwesomeIcon icon={faCamera} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-purple-600 w-10" />
-                                             <input accept="image/*" onChange={(e) => setImage(e.target.files[0])} type="file" placeholder="Enter english description" className="w-full h-10 indent-2 rounded-md outline-none opacity-0 cursor-pointer" />
+                                             <input id="file" accept="image/*" onChange={(e) => {setImage(e.target.files[0]); viewImage(e)}} type="file" placeholder="Enter english description" className="w-full h-10 indent-2 rounded-md outline-none opacity-0 cursor-pointer" />
                                         </div>
                                    </div>
                                    <div className="flex justify-around max-sm:block max-sm:ml-3 max-sm:text-sm">
@@ -131,12 +152,12 @@ function AddBanner() {
                                              <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2"><FormattedMessage id='category' /></div>
                                              <select onChange={(e) => setCategory(e.target.value)} className="w-full h-10 indent-2 rounded-md outline-none">
                                                   <option disabled value=''>Select Category</option>
-                                                  <option value="product"><FormattedMessage id='product' /></option>
-                                                  <option value="store"><FormattedMessage id='store' /></option>
+                                                  <option selected={location.state.category == "product"} value="product"><FormattedMessage id='product' /></option>
+                                                  <option selected={location.state.category == "store"} value="store"><FormattedMessage id='store' /></option>
                                              </select>
                                         </div>
                                         <div className="w-2/5 flex flex-col max-sm:w-4/5">
-                                             <div className="font-bold w-fit mb-2 max-sm:max-sm:my-2">Select</div>
+                                             <div className="font-bold w-fit mb-7 max-sm:max-sm:my-2"></div>
                                              <AsyncPaginate
                                                   value={option}
                                                   key={category}
@@ -149,9 +170,9 @@ function AddBanner() {
                                              />
                                         </div>
                                    </div>
-                                   <button onClick={createBanner} className="my-8 rounded-md bg-white text-purple-500 px-7 py-2 cursor-pointer font-semibold hover:border hover:border-white hover:text-white hover:bg-purple-200 duration-200">
+                                   <button onClick={updateBanner} className="my-8 rounded-md bg-white text-purple-500 px-7 py-2 cursor-pointer font-semibold hover:border hover:border-white hover:text-white hover:bg-purple-200 duration-200">
                                         {
-                                             !sendWait && <FormattedMessage id='create' />
+                                             !sendWait && <FormattedMessage id='update' />
                                         }
                                         <ClipLoader color="purple" loading={sendWait} size={20} />
                                    </button>
@@ -163,4 +184,4 @@ function AddBanner() {
      );
 }
 
-export default AddBanner;
+export default UpdateBanner;
