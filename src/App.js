@@ -163,19 +163,17 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <AuthProvider role="admin">
           <IntlProvider locale={currentLang} messages={messages[currentLang]}>
             <Routes>
-              <Route path='/login' element={<Login />}></Route>
               <Route path='/' element={<Navigate to='/login' />} />
+              <Route path='/login' element={<Login />} />
               {
                 AdminRoutes().map((route, index) => (
-                  <Route path={route.path} element={route.element} key={index}></Route>
+                  <Route path={route.path} element={<AuthProvider role="admin">{route.element}</AuthProvider>} key={index}></Route>
                 ))
               }
             </Routes>
           </IntlProvider>
-        </AuthProvider>
       </BrowserRouter>
     </div>
   );
